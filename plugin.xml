@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 			id="twitter-connect-plugin"
-	  version="0.4.0">
+	  version=“0.5.0”>
 	<name>Twitter Connect</name>
 	<description>Twitter Connect Plugin - Allows single-sign on logins using Twitter</description>
 	<license>Apache 2.0</license>
@@ -48,7 +48,7 @@
 		
 		<framework src="src/ios/Fabric.framework" custom="true" />
 		<framework src="src/ios/TwitterKit.framework" custom="true" />
-		<resource-file src="src/ios/TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle" />
+		<!--  <resource-file src="src/ios/TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle" /> -—>
 		<framework src="CoreText.framework" />
 		<framework src="AddressBook.framework" />
 		<framework src="QuartzCore.framework" />
