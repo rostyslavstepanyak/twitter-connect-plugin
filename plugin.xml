@@ -46,6 +46,7 @@
 		<framework src="src/ios/Fabric.framework" custom="true" />
 		<framework src="src/ios/TwitterKit.framework" custom="true" />
         <framework src="src/ios/TwitterCore.framework" custom="true" />
+        <framework src="CoreText.frameworks" />
 		<framework src="AddressBook.framework" />
 		<framework src="QuartzCore.framework" />
 	</platform>
