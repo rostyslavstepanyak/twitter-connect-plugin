@@ -49,13 +49,5 @@
 		<framework src="CoreText.framework" />
 		<framework src="AddressBook.framework" />
 		<framework src="QuartzCore.framework" />
-		<config-file target="*-Info.plist" parent="Fabric">
-			<dict>
-				<key>APIKey</key>
-				<string>$FABRIC_KEY</string>
-				<key>Kits</key>
-				<array></array>
-			</dict>
-		</config-file>
 	</platform>
 </plugin>
