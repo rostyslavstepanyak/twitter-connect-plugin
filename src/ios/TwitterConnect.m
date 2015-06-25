@@ -21,20 +21,42 @@
 - (void)login:(CDVInvokedUrlCommand*)command
 {
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
-		CDVPluginResult* pluginResult = nil;
+		__block CDVPluginResult* pluginResult = nil;
 		if (session){
-			NSLog(@"signed in as %@", [session userName]);
-			NSDictionary *userSession = @{
-										  @"userName": [session userName],
-										  @"userId": [session userID],
-										  @"secret": [session authTokenSecret],
-										  @"token" : [session authToken]};
-			pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:userSession];
+            TWTRShareEmailViewController* shareEmailViewController = [[TWTRShareEmailViewController alloc] initWithCompletion:^(NSString* email,   NSError* error) {
+                if(error) {
+                    email = @"";
+                }
+                
+                NSDictionary *userSession = @{
+                                              @"userName": [session userName],
+                                              @"userId": [session userID],
+                                              @"secret": [session authTokenSecret],
+                                              @"token" : [session authToken],
+                                              @"email" :  email};
+                
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                             messageAsDictionary:userSession];
+                
+                
+                [self.commandDelegate sendPluginResult:pluginResult
+                                            callbackId:command.callbackId];
+                
+             }];
+            
+             id currentController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+             [currentController presentViewController:shareEmailViewController
+                                            animated:YES
+                                          completion:nil];
+
+			
+			
 		} else {
 			NSLog(@"error: %@", [error localizedDescription]);
-			pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+			pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                             messageAsString:[error localizedDescription]];
 		}
-		[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+		
 	}];
 }
 
