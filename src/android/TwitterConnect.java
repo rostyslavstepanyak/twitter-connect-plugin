@@ -18,9 +18,9 @@ import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import io.fabric.sdk.android.Fabric;
@@ -67,9 +67,23 @@ public class TwitterConnect extends CordovaPlugin {
 			public void run() {
 				Twitter.logIn(activity, new Callback<TwitterSession>() {
 					@Override
-					public void success(Result<TwitterSession> twitterSessionResult) {
+					public void success(final Result<TwitterSession> twitterSessionResult) {
+
+						TwitterAuthClient authClient = new TwitterAuthClient();
+						authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new Callback() {
+							@Override
+							public void success(Result result) {
+								callbackContext.success(handleResult(twitterSessionResult.data, result.data.toString()));
+							}
+
+							@Override
+							public void failure(TwitterException exception) {
+								callbackContext.success(handleResult(twitterSessionResult.data, ""));
+							}
+						});
+
 						Log.v(LOG_TAG, "Successful login session!");
-						callbackContext.success(handleResult(twitterSessionResult.data));
+
 
 					}
 
@@ -94,13 +108,14 @@ public class TwitterConnect extends CordovaPlugin {
 		});
 	}
 
-	private JSONObject handleResult(TwitterSession result) {
+	private JSONObject handleResult(TwitterSession result, String email) {
 		JSONObject response = new JSONObject();
 		try {
 			response.put("userName", result.getUserName());
 			response.put("userId", result.getUserId());
 			response.put("secret", result.getAuthToken().secret);
 			response.put("token", result.getAuthToken().token);
+			response.put("email", email);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

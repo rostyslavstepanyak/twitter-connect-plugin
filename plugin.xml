@@ -50,6 +50,7 @@
         <framework src="CoreText.framework" />
 		<framework src="AddressBook.framework" />
 		<framework src="QuartzCore.framework" />
+        <framework src="CoreData.framework" />
         <config-file target="*-Info.plist" parent="Fabric">
             <dict>
                 <key>APIKey</key>
